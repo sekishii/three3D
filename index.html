@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Map 3D Viewer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="three 3D preview tool for glTF 2.0 3D models.">
+  <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+  <meta http-equiv="Access-Control-Allow-Headers" content="X-Requested-With"" />
+  <meta http-equiv="Access-Control-Allow-Methods" content="PUT,POST,GET,DELETE,OPTIONS" />
+  <link rel="shortcut icon" href="assets/favicon.ico">
+  <link rel="stylesheet" href="style.css">
+  <script src="lib/gltf-validator.js"></script>
+  <script src="lib/jquery.min.js"></script>
+  <!-- 测试用 预处理读取gltf内容 -->
+  <script src="gltf.js"></script>
+  <!-- <script src="gltf2.js"></script> -->
+  <!-- 测试用 预处理读取gltf内容 -->
+  <script src="bootstrap.min.js"></script>
+  <script src="lib/contextmenu/jquery.contextMenu.js"></script>
+  <script src="lib/contextmenu/jquery.ui.position.min.js"></script>
+  <link rel="stylesheet" href="lib/contextmenu/jquery.contextMenu.min.css">
+  <script type="text/javascript">
+    
+      $(function() {
+        $.contextMenu({
+            selector: '.context-menu-one', 
+            callback: function(key, options) {
+
+                if (key != "info") {
+                  var m = "clicked: " + key;
+                  window.console && console.log(m) || alert(m); 
+                } else {
+                  var selectedInfo = $("#selectedModal").val();
+                  // console.log(selectedInfo);
+                  alert(selectedInfo);
+                }
+                
+            },
+            items: {
+                "info": {name: "信息", icon: ""},
+                "copy": {name: "Copy", icon: ""},
+                "sep1": "---------",
+                "quit": {name: "Quit", icon: function(){
+                    return 'context-menu-icon context-menu-icon-quit';
+                }}
+            }
+        });
+
+        $('.context-menu-one').on('click', function(e){
+            console.log('clicked', this);
+        })
+
+        $("#modalChangeTest").on('click', function(e){
+            console.log("changeModal");
+            // var modalGltf = $("#modal");
+
+            //////////test////////////
+            var modal2Value = $("#modal2").val();
+            $("#modal").val(modal2Value);
+            // alert("go");
+
+            const event = document.createEvent("HTMLEvents");
+            event.initEvent("change", true, true);
+            // alert("test");
+            var modalGltf = document.getElementById('modal');
+            modalGltf.dispatchEvent(event);
+        })
+
+    });
+  </script>
+
+</head>
+<body>
+
+ <!--  <div>
+    <p>test</p>
+    <p>test</p>
+    <p>test</p>
+  </div> -->
+
+  <div id="info">
+    <button id="export_scenes">Export</button>
+    <button id="add_modal">AddCamera</button>
+    <button id="modalChangeTest">test</button>
+  </div>
+
+    <!-- <div id="modal" class="modal"></div> -->
+    <!-- <div class="modal camera">  </div> -->
+  
+
+    <main class="wrap context-menu-one">
+        <div class="dropzone"></div>
+        <div class="spinner"></div>
+    </main>
+    <script src="bundle.js"></script>
+    
+   
+</body>

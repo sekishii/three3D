@@ -1,0 +1,69 @@
+{
+  "name": "three-gltf-viewer",
+  "productName": "glTF Viewer",
+  "version": "1.4.0",
+  "description": "Preview glTF models using three.js and a drag-and-drop interface.",
+  "main": "electron/main.js",
+  "browser": "src/app.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "browserify -t brfs src/app.js -o bundle.js",
+    "build:validator": "echo \"window.gltfValidator = require('gltf-validator');\" | browserify - > lib/gltf-validator.js",
+    "build:registry": "curl https://rawgit.com/KhronosGroup/glTF-Generator-Registry/master/registry.json -o lib/gltf-generator-registry.json",
+    "package": "npm run package:windows && npm run package:mac && npm run package:linux",
+    "package:windows": "electron-packager . gltf-viewer --overwrite --asar --platform=win32 --arch=ia32 --icon=assets/icons/glTF-Viewer.ico --out=dist --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"glTF Viewer\"",
+    "package:mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/glTF-Viewer.icns --out=dist",
+    "package:linux": "electron-packager . gltf-viewer --overwrite --asar --platform=linux --arch=x64 --icon=assets/icons/glTF-Viewer.png --out=dist",
+    "dev": "budo src/app.js:bundle.js --port 3000",
+    "dev:electron": "concurrently \"watchify src/app.js -o bundle.js\" \"npm start\"",
+    "test": "node scripts/gen_test.js",
+    "deploy": "npm run build && now --target production && npm run clean",
+    "clean": "rm bundle.js",
+    "postversion": "git push && git push --tags"
+  },
+  "keywords": [
+    "gltf",
+    "three.js",
+    "three",
+    "3d",
+    "model",
+    "modeling",
+    "webgl"
+  ],
+  "author": "Don McCurdy <dm@donmccurdy.com> (https://www.donmccurdy.com)",
+  "license": "MIT",
+  "dependencies": {
+    "async": "^3.1.0",
+    "brfs": "^2.0.2",
+    "browserify-fs": "^1.0.0",
+    "dat.gui": "^0.7.5",
+    "file-system": "^2.2.2",
+    "glob-to-regexp": "^0.4.0",
+    "gltf-validator": "^2.0.0-dev.2.7",
+    "handlebars": "^4.0.11",
+    "open": "0.0.5",
+    "query-string": "^4.3.4",
+    "serve": "^10.0.2",
+    "simple-dropzone": "^0.5.1",
+    "three": "^0.105.1",
+    "three-vignette-background": "^1.0.3",
+    "wait-until": "0.0.2",
+    "zipjs-browserify": "^1.0.1"
+  },
+  "devDependencies": {
+    "browserify": "^16.5.0",
+    "budo": "^11.5.0",
+    "chalk": "^2.1.0",
+    "concurrently": "^3.5.0",
+    "electron": "^3.0.2",
+    "electron-packager": "^12.1.2",
+    "glslify": "^6.3.1",
+    "node-fetch": "^1.7.3",
+    "watchify": "^3.11.0"
+  },
+  "browserify": {
+    "transform": [
+      "glslify"
+    ]
+  }
+}
